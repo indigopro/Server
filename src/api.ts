@@ -1,7 +1,7 @@
 
 import 'reflect-metadata'
 import { NextFunction } from 'express'
-import type { Authorization } from './core/authentication'
+import type { Authorization } from '@indigopro/core'
 import { AsymmetricCryptor } from './cryptor'
 import { AuthorizeService, DataService, ServiceTypes, UserIdentity } from './services'
 import { debug, Host } from './host'
