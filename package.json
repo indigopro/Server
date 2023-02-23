@@ -1,6 +1,6 @@
 {
   "name": "@indigopro/server",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
@@ -23,7 +23,7 @@
   },
   "scripts": {
     "build": "npx tsc",
-    "deploy:npm": "npx del-cli --force ./lib && npx standard-version && npx tsc && npm publish"
+    "deploy": "npx del-cli --force ./lib && npx standard-version && npx tsc && npm publish"
   },
   "repository": {
     "type": "git",
