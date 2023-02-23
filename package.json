@@ -1,18 +1,16 @@
 {
   "name": "@indigopro/server",
-  "version": "1.0.18",
+  "version": "1.0.21",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@indigopro/core": "^1.0.1",
+    "@indigopro/core": "^1.0.2",
     "@types/cors": "^2.8.13",
-    "@types/crypto-js": "^4.1.1",
     "@types/express": "^4.17.17",
     "@types/moment": "^2.13.0",
     "@types/moment-timezone": "^0.5.30",
     "@types/mssql": "^8.1.2",
     "cors": "^2.8.5",
-    "crypto-js": "^4.1.1",
     "express": "^4.18.2",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.40",
@@ -21,11 +19,15 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.16",
+    "del-cli": "^5.0.0",
+    "standard-version": "^9.5.0",
     "typescript": "^4.9.5"
   },
   "scripts": {
     "build": "npx tsc",
-    "publish": "npx tsc && npm publish"
+    "purge": "del-cli --force ./lib",
+    "publish2": "purge && build && npm publish",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
