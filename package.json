@@ -23,9 +23,9 @@
   },
   "scripts": {
     "build": "npx tsc",
-    "purge": "del-cli --force ./lib",
+    "purge": "npx del-cli --force ./lib",
     "release": "npx standard-version",
-    "publish": "release && purge && build && npm publish"
+    "publish": "npx del-cli --force ./lib && npx standard-version && build && npm publish"
   },
   "repository": {
     "type": "git",
