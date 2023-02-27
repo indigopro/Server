@@ -1,9 +1,9 @@
 
 import MSSQL from 'mssql'
-import { Settings, DataConnection } from './settings';
 import { virtualFolder } from './repository';
+import moment, { type Moment } from 'moment'
 
-//#region 
+//#region Types
 
 export enum ServiceTypes {
   DataContext,
@@ -57,6 +57,13 @@ export class ServiceCollection {
 
 //#region DataContext
 
+export type DataConnectionSettings = {
+  user: string;
+  password: string;
+  server: string;
+  database: string;
+}
+
 export type DataResult = {
   status: number
   data: Array<any> | any | null
@@ -67,7 +74,7 @@ export type DataResult = {
 export class DataContext extends Service {
   connectionPool: MSSQL.ConnectionPool
 
-  constructor(dataConnection: DataConnection) {
+  constructor(dataConnection: DataConnectionSettings) {
     super(ServiceTypes.DataContext)
     this.connectionPool = new MSSQL.ConnectionPool(
       {
@@ -107,7 +114,6 @@ export class DataContext extends Service {
 
 export abstract class DataService extends Service {
   readonly name: string;
-  readonly settings: Settings;
   readonly dataContext: DataContext;
   readonly services: ServiceCollection;
   readonly folder: string;
@@ -115,7 +121,6 @@ export abstract class DataService extends Service {
   constructor(dataContext: string | undefined) {
     super(ServiceTypes.DataService)
     this.name = `${this.constructor.name.substring(0, this.constructor.name.includes('V') ? this.constructor.name.lastIndexOf('V') : this.constructor.length)}`;
-    this.settings = host.settings;
     this.dataContext = host.services.getService<DataContext>(dataContext || 'DataContext')
     this.services = host.services;
     this.folder = `${virtualFolder('assets').physicalPath}/${this.name}`;
@@ -126,6 +131,8 @@ export abstract class DataService extends Service {
 
 //#endregion
 
+//#region AuthorizeService
+
 export type UserIdentity = {
   id: number
   name: string
@@ -133,12 +140,10 @@ export type UserIdentity = {
 }
 
 export abstract class AuthorizeService extends Service {
-  readonly settings: Settings;
   readonly dataContext: DataContext;
 
   constructor(dataContext: string | undefined) {
     super(ServiceTypes.DataService)
-    this.settings = host.settings;
     this.dataContext = host.services.getService<DataContext>(dataContext || 'DataContext')
   }
 
@@ -146,3 +151,76 @@ export abstract class AuthorizeService extends Service {
 
   getData = (query: string) => this.dataContext.getData(query);
 }
+
+//#endregion
+
+//#region SMTPService
+
+export type SMTPSettings = {
+  enabled: boolean
+  host: string
+  port: number
+  auth?: {
+    user: string
+    pass: string
+  }
+  noReplyEmail: string
+  bccDefaultEmailAddress: string
+  secure?: boolean
+  ignoreTLS?: boolean
+}
+
+export type EmailParameters = {
+  from?: string
+  to?: string | Array<string>
+  cc?: string | Array<string>
+  bcc?: string | Array<string>
+  subject?: string
+  content?: string
+  isHtml?: boolean
+  attachments?: any[]
+}
+
+//#endregion
+
+//#region SMPPService
+
+export type SMPPSettings = {
+  enabled: boolean
+  endpointURL: string
+  productToken: string
+  allowedChannels: Array<string>
+  sender: string
+  bodyType?: 'auto'
+}
+
+export type SMSParameters = {
+  message: string
+  phoneNumber: string
+}
+
+//#endregion
+
+//#region OTPService
+
+export type OTPSettings = {
+  timeoutSec: number
+}
+
+export const OTPDefaultSettings: OTPSettings = {
+  timeoutSec: 90
+}
+
+
+export abstract class OTPService extends Service {
+
+  // export const getExpireDatetime = (date: Date = new Date(), seconds: number = TimeoutSec): Moment => moment().add(seconds, 'seconds')
+
+  // export const newOTP = () => {
+  //   const otpCode = otpGenerator.generate(6, { digits: true, lowerCaseAlphabets: false, specialChars: false, upperCaseAlphabets: false })
+  //   return otpCode
+  // }
+
+}
+
+ //#endregion 

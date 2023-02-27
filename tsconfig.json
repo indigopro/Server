@@ -3,24 +3,16 @@
     "target": "ESNext",
     "module": "commonjs",
     "declaration": true,
-    "outDir": "./lib",
+    "outDir": "./dist",
     "strict": true,
-
-    
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    /* Experimental Options */
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    /* Advanced Options */
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    // "paths": {
-    //   "indigoPro/*": [ "./src/lib/*" ]
-    // },
-
     "sourceMap": true,
   },
-  "include": ["src"],
+  "include": ["src"]
 }

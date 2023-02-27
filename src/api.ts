@@ -1,17 +1,18 @@
 
 import 'reflect-metadata'
 import { NextFunction } from 'express'
-import type { Authorization } from '@indigopro/core'
 import { AsymmetricCryptor } from './cryptor'
 import { AuthorizeService, DataService, ServiceTypes, UserIdentity } from './services'
 import { debug, Host } from './host'
 import moment from 'moment'
+import { AuthenticationState, Authorization, User } from '@indigopro/core'
 
 export type Args = any & {
   context?: {
-    domain: string, // Domain
-    user: any, // User,
-    authentication: any, // { authorization, authorized },
+    domain: string,
+    user: User,
+    settings: any,
+    authentication: AuthenticationState,
     request: any,
     response: any
   }
@@ -64,17 +65,14 @@ export const api = (options?: any): (req: any, res: any, next: NextFunction) => 
   })
 
   // debug enpoints info
-  console.debug('-------------------------------------------------------------------------------------------------')
-  endpoints.forEach(endpoint => console.debug(`%c${endpoint.authorization === 'AllowAnonymous' ? 'AllowAnonymous  ' : '\t\t'} %c${endpoint.verb.padStart(4, ' ')}: %c${endpoint.route}`, endpoint.verb === 'POST' ? 'color:#0066CC' : 'color:yellow;', 'color:gray;', 'color:white;background:red;'))
-  console.debug('-------------------------------------------------------------------------------------------------')
+  endpoints.forEach(endpoint => console.debug(endpoint.authorization === 'AllowAnonymous' ? 'AllowAnonymous  ' : '\t\t', endpoint.verb.padStart(4, ' '), endpoint.route))
 
   const authenticate = async (type: Authorization, authorization: string): Promise<{ authorized: boolean; user: any }> => {
     const startPerformance = performance.now();
     let user: UserIdentity | undefined = undefined
     let authorized: boolean = false
 
-    console.debug('-------------------------------------------------------------------------------------------------')
-    console.debug('authentication:', {type})
+    console.debug('\nauthentication:', { type })
 
     switch (type) {
       case 'AllowAnonymous':
@@ -125,7 +123,6 @@ export const api = (options?: any): (req: any, res: any, next: NextFunction) => 
         }
     }
 
-    
     const endPerformance = performance.now();
     console.debug('total performance:', { time: endPerformance - startPerformance }, 'milliseconds.');
     return { authorized, user }
@@ -149,9 +146,8 @@ export const api = (options?: any): (req: any, res: any, next: NextFunction) => 
           const origin: string = headers.origin
           const domain: string = origin && new URL(origin).host
 
-          args = { ...request.query, ...request.body, context: { domain, user, authentication: { authorization: endpoint.authorization, authorized }, request, response } }
-          console.debug('-------------------------------------------------------------------------------------------------')
-          console.debug('request:', { endpoint })
+          args = { ...request.query, ...request.body, context: { domain, user, authentication: { authorization: endpoint.authorization, authorized }, settings: host.settings, request, response } }
+          console.debug('\nrequest:', { endpoint })
           console.debug('args:', { ...args, context: { ...args.context, request: '[...]', response: '[...]' } })
           const data = await dataService[method](args)
           response.status(200).json({ status: "OK", data })

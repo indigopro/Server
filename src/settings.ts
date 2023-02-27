@@ -1,13 +1,6 @@
-import { AsymmetricCryptorSettings, SymmetricCryptorSettings } from './cryptor';
+import { AsymmetricCryptorSettings } from './cryptor';
+import { DataConnectionSettings, SMPPSettings, SMTPSettings } from './services';
 import { VirtualFolders } from './repository';
-
-
-export type DataConnection = {
-  user: string;
-  password: string;
-  server: string;
-  database: string;
-}
 
 export type Settings = {
   server: {
@@ -19,11 +12,10 @@ export type Settings = {
   authenticationToken: {
     expiresIn: number | string;
   };
-  dataConnection: DataConnection;
+  dataConnection: DataConnectionSettings;
   smtp?: SMTPSettings;
   smpp?: SMPPSettings;
   asymmetricEncryption: AsymmetricCryptorSettings;
-  symmetricEncryption: SymmetricCryptorSettings;
   virtualFolders: VirtualFolders;
   logEnabled: boolean;
   api: {
@@ -34,51 +26,3 @@ export type Settings = {
     any;
   };
 };
-
-//#region SMTP
-
-export type SMTPSettings = {
-  enabled: boolean
-  host: string
-  port: number
-  auth?: {
-    user: string
-    pass: string
-  }
-  noReplyEmail: string
-  bccDefaultEmailAddress: string
-  secure?: boolean
-  ignoreTLS?: boolean
-}
-
-
-export type EmailParameters = {
-  from?: string
-  to?: string | Array<string>
-  cc?: string | Array<string>
-  bcc?: string | Array<string>
-  subject?: string
-  content?: string
-  isHtml?: boolean
-  attachments?: any[]
-}
-
-//#endregion
-
-//#region 
-
-export type SMPPSettings = {
-  enabled: boolean
-  endpointURL: string
-  productToken: string
-  allowedChannels: Array<string>
-  sender: string
-  bodyType?: 'auto'
-}
-
-export type SMSParameters = {
-  message: string
-  phoneNumber: string
-}
-
-//#endregion

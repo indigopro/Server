@@ -1,0 +1,29 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/dist": true,
+        "dist": true,
+        "**/node_modules": true,
+        "node_modules": true,
+        "**/.vscode": true,
+        ".vscode": true,
+        "**/.gitignore": true,
+        ".gitignore": true,
+        "**/CHANGELOG.md": true,
+        "CHANGELOG.md": true,
+        "**/package-lock.json": true,
+        "package-lock.json": true,
+        "**/.prettierrc": true,
+        ".prettierrc": true,
+        "**/.prettierignore": true,
+        ".prettierignore": true,
+        "**/.eslintignore": true,
+        ".eslintignore": true
+    },
+    "explorerExclude.backup": {}
+}

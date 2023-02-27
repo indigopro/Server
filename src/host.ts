@@ -1,6 +1,6 @@
 import express from 'express'
-import { DataConnection, Settings } from './settings'
-import { DataContext, ServiceCollection, Service } from './services'
+import { Settings } from './settings'
+import { DataConnectionSettings, DataContext, ServiceCollection, Service } from './services'
 import { api } from './api'
 import { Activator } from './reflector'
 import cors from 'cors'
@@ -19,16 +19,16 @@ export class Host {
   }
 
   useDataBaseContext(...args:
-    [dataConnection: DataConnection] |
+    [dataConnection: DataConnectionSettings] |
     [dataContext: DataContext] |
-    [key: string, dataConnection: DataConnection] |
+    [key: string, dataConnection: DataConnectionSettings] |
     [key: string, dataContext: DataContext]): void {
 
     let key = ((args[0]?.constructor.name === 'String') ? args[0] : undefined) as string;
     let dataContext = (key ? ((args[1] instanceof DataContext) ? args[1] : undefined) : ((args[0] instanceof DataContext) ? args[0] : undefined)) as DataContext
 
     if (!dataContext)
-      dataContext = new DataContext((key ? args[1] : args[0]) as DataConnection)
+      dataContext = new DataContext((key ? args[1] : args[0]) as DataConnectionSettings)
 
     this.services.addService(key, dataContext)
   }
