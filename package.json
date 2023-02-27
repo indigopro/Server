@@ -1,8 +1,11 @@
 {
   "name": "@indigopro/server",
-  "version": "1.0.40",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "version": "1.0.41",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
   "dependencies": {
     "@indigopro/core": "^1.0.2",
     "@types/cors": "^2.8.13",
@@ -23,7 +26,7 @@
   },
   "scripts": {
     "build": "npx tsc",
-    "deploy": "npx del-cli --force ./lib && npx standard-version && npx tsc && npm publish"
+    "deploy": "npx del-cli --force ./dist && npx standard-version && npx tsc && npm publish"
   },
   "repository": {
     "type": "git",
@@ -37,8 +40,5 @@
   "bugs": {
     "url": "https://github.com/indigopro/server/issues"
   },
-  "homepage": "https://github.com/indigopro/server#readme",
-  "files": [
-    "lib/**/*"
-  ]
+  "homepage": "https://github.com/indigopro/server#readme"
 }
